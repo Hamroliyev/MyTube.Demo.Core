@@ -6,7 +6,8 @@ namespace MyTube.Demo.Core.API.Controllers
     [Route("[controller]")]
     public class HomeController : ControllerBase
     {
-        public ActionResult GetHi()
+        [HttpGet]
+        public ActionResult<string> GetHi()
         {
             return Ok("Hi, I'm Ahmadjon Hamroliyev");
         }
