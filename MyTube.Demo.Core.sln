@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyTube.Demo.Core.API", "MyT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTube.Demo.Core.API.Tests.Unit", "MyTube.Demo.Core.API.Tests.Unit\MyTube.Demo.Core.API.Tests.Unit.csproj", "{5F00CED3-A20B-420E-9A81-52FF111783BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTube.Api.Infrastructure.Build", "MyTube.Api.Infrastructure.Build\MyTube.Api.Infrastructure.Build.csproj", "{E572FF0A-3E2E-4D5E-9795-36B781907A81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5F00CED3-A20B-420E-9A81-52FF111783BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F00CED3-A20B-420E-9A81-52FF111783BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F00CED3-A20B-420E-9A81-52FF111783BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E572FF0A-3E2E-4D5E-9795-36B781907A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E572FF0A-3E2E-4D5E-9795-36B781907A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E572FF0A-3E2E-4D5E-9795-36B781907A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E572FF0A-3E2E-4D5E-9795-36B781907A81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
