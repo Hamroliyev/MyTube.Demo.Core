@@ -19,7 +19,6 @@ namespace MyTube.Demo.Core.API.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("MyTube.Demo.Core.API.Models.Metadatas.VideoMetadata", b =>
@@ -50,6 +49,7 @@ namespace MyTube.Demo.Core.API.Migrations
 
                     b.ToTable("VideoMetadatas");
                 });
+            
 #pragma warning restore 612, 618
         }
     }
