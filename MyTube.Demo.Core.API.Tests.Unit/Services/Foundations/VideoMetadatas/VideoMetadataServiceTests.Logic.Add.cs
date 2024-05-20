@@ -1,13 +1,10 @@
-﻿using MyTube.Demo.Core.API.Models.Metadatas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Moq;
+using MyTube.Demo.Core.API.Models.Metadatas;
 using System.Threading.Tasks;
 
 namespace MyTube.Demo.Core.API.Tests.Unit.Services.Foundations.VideoMetadatas
 {
-    internal partial class VideoMetadataServiceTests
+    public partial class VideoMetadataServiceTests
     {
         [Fact]
         public async Task ShouldAddVideoMetadataAsync()
@@ -16,14 +13,23 @@ namespace MyTube.Demo.Core.API.Tests.Unit.Services.Foundations.VideoMetadatas
             VideoMetadata randomVideoMetadata = CreateRandomVideoMetadata();
             VideoMetadata inputVideoMetadata = randomVideoMetadata;
             VideoMetadata persistedVideoMetadata = inputVideoMetadata;
-            VideoMetadata expectedVideoMetadata = persistedVideoMetadata;
+            VideoMetadata expectedVideoMetadata = persistedVideoMetadata.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
-                broker.InsertVideoMetadataAsync(inputVideoMetadata)
-                    .ReturnsAsync(persistedVideoMetadata));
-            //when
+                broker.InsertVideoMetadataAsync(inputVideoMetadata))
+                    .ReturnsAsync(persistedVideoMetadata);
 
+            //when
+            VideoMetadata actualVideoMetadata =
+                await this.videoMetadataService.AddVideoMetadataAsync(inputVideoMetadata);
             //then
+            actualVideoMetadata.Should().BeEquivalentTo(expectedVideoMetadata);
+
+            this.storageBrokerMock.Verify(broker =>
+            broker.InsertVideoMetadataAsync(inputVideoMetadata), Times.Once());
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

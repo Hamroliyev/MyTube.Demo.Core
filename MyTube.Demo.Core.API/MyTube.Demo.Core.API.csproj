@@ -23,7 +23,7 @@
   </ItemGroup>
 	
 	<ItemGroup>
-		<InternalsVisibleTo Include="MyTube.Demo.Core.API.Tests.Unit"/>
+		<InternalsVisibleTo Include="MyTube.Demo.Core.API.Tests.Unit" />
 	</ItemGroup>
 
 </Project>
