@@ -1,9 +1,12 @@
-﻿using Moq;
-using MyTube.Demo.Core.API.Models.Metadatas;
-using System.Threading.Tasks;
-using Force.DeepCloner;
+﻿// ---------------------------------------------------------------
+// Copyright (c) Coalition of the Good-Hearted Engineers
+// FREE TO USE AS LONG AS SOFTWARE FUNDS ARE DONATED TO THE POOR
+// ---------------------------------------------------------------
 
-namespace MyTube.Demo.Core.API.Tests.Unit.Services.Foundations.VideoMetadatas
+using Moq;
+using MyTube.Demo.Core.API.Models.Metadatas;
+
+namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 {
     public partial class VideoMetadataServiceTests
     {
@@ -14,7 +17,7 @@ namespace MyTube.Demo.Core.API.Tests.Unit.Services.Foundations.VideoMetadatas
             VideoMetadata randomVideoMetadata = CreateRandomVideoMetadata();
             VideoMetadata inputVideoMetadata = randomVideoMetadata;
             VideoMetadata persistedVideoMetadata = inputVideoMetadata;
-            VideoMetadata expectedVideoMetadata = persistedVideoMetadata.DeepClone();
+            VideoMetadata expectedVideoMetadata = persistedVideoMetadata;
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertVideoMetadataAsync(inputVideoMetadata))
@@ -25,7 +28,8 @@ namespace MyTube.Demo.Core.API.Tests.Unit.Services.Foundations.VideoMetadatas
                 .AddVideoMetadataAsync(inputVideoMetadata);
 
             //then
-            actualVideoMetadata.Should().
+            actualVideoMetadata.Should().BeEquivalentTo(
+                expectedVideoMetadata);
         }
     }
 }
