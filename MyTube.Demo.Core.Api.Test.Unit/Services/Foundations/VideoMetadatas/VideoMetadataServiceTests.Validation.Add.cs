@@ -3,6 +3,7 @@
 // FREE TO USE AS LONG AS SOFTWARE FUNDS ARE DONATED TO THE POOR
 // ---------------------------------------------------------------
 
+using FluentAssertions;
 using Moq;
 using MyTube.Demo.Core.API.Models.Exeptions;
 using MyTube.Demo.Core.API.Models.Metadatas;

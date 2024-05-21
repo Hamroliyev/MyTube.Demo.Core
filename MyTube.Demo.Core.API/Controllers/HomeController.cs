@@ -1,3 +1,8 @@
+// ---------------------------------------------------------------
+// Copyright (c) Coalition of the Good-Hearted Engineers
+// FREE TO USE AS LONG AS SOFTWARE FUNDS ARE DONATED TO THE POOR
+// ---------------------------------------------------------------
+
 using Microsoft.AspNetCore.Mvc;
 using MyTube.Demo.Core.API.Brokers.Storages;
 using MyTube.Demo.Core.API.Models.Metadatas;
