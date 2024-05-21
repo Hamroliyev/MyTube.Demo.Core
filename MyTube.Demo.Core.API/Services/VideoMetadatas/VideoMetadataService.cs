@@ -1,5 +1,4 @@
-﻿using MyTube.Demo.Core.API.Brokers.Loggings;
-using MyTube.Demo.Core.API.Brokers.Storages;
+﻿using MyTube.Demo.Core.API.Brokers.Storages;
 using MyTube.Demo.Core.API.Models.Metadatas;
 using System.Threading.Tasks;
 
@@ -19,6 +18,5 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
 
         public async ValueTask<VideoMetadata> AddVideoMetadataAsync(VideoMetadata videoMetadata) =>
             await this.storageBroker.InsertVideoMetadataAsync(videoMetadata);
-
     }
 }

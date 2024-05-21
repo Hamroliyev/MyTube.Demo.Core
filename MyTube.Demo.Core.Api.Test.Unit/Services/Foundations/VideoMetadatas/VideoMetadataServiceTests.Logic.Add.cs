@@ -1,8 +1,13 @@
-﻿using Moq;
+﻿// ---------------------------------------------------------------
+// Copyright (c) Coalition of the Good-Hearted Engineers
+// FREE TO USE AS LONG AS SOFTWARE FUNDS ARE DONATED TO THE POOR
+// ---------------------------------------------------------------
+
+using Moq;
 using MyTube.Demo.Core.API.Models.Metadatas;
 using System.Threading.Tasks;
 
-namespace MyTube.Demo.Core.API.Tests.Unit.Services.Foundations.VideoMetadatas
+namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 {
     public partial class VideoMetadataServiceTests
     {
@@ -20,16 +25,18 @@ namespace MyTube.Demo.Core.API.Tests.Unit.Services.Foundations.VideoMetadatas
                     .ReturnsAsync(persistedVideoMetadata);
 
             //when
-            VideoMetadata actualVideoMetadata =
-                await this.videoMetadataService.AddVideoMetadataAsync(inputVideoMetadata);
-            //then
-            actualVideoMetadata.Should().BeEquivalentTo(expectedVideoMetadata);
+            VideoMetadata actualVideoMetadata = await this.videoMetadataService
+                .AddVideoMetadataAsync(inputVideoMetadata);
+
+            //then  
+            actualVideoMetadata.Should().BeEquivalentTo(
+                expectedVideoMetadata);
 
             this.storageBrokerMock.Verify(broker =>
-            broker.InsertVideoMetadataAsync(inputVideoMetadata), Times.Once());
+                broker.InsertVideoMetadataAsync(inputVideoMetadata),
+                    Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
-            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
