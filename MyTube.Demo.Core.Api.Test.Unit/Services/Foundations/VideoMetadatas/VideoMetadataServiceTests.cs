@@ -9,7 +9,9 @@ using MyTube.Demo.Core.API.Brokers.Storages;
 using MyTube.Demo.Core.API.Models.Metadatas;
 using MyTube.Demo.Core.API.Services.VideoMetadatas;
 using System;
+using System.Linq.Expressions;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 {
@@ -44,5 +46,8 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 
             return filler;
         }
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
     }
 }
