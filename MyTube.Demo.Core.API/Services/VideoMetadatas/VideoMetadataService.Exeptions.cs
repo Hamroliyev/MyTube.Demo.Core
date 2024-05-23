@@ -34,7 +34,7 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
             {
                 FailedVideoMetadataStorageException failedVideoMetadataStorageException =
                     new FailedVideoMetadataStorageException(
-                        message: "Failed metadata error occured, contact support.",
+                        message: "Failed Video metadata error occured, contact support.",
                         innerException: sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedVideoMetadataStorageException);
