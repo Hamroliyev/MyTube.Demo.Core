@@ -3,6 +3,7 @@
 // FREE TO USE AS LONG AS SOFTWARE FUNDS ARE DONATED TO THE POOR
 // ---------------------------------------------------------------
 
+using Microsoft.Data.SqlClient;
 using Moq;
 using MyTube.Demo.Core.API.Brokers.Loggings;
 using MyTube.Demo.Core.API.Brokers.Storages;
@@ -10,6 +11,7 @@ using MyTube.Demo.Core.API.Models.Metadatas;
 using MyTube.Demo.Core.API.Services.VideoMetadatas;
 using System;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using Tynamix.ObjectFiller;
 using Xeptions;
 
@@ -49,5 +51,8 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
+
+        private static SqlException GetSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
     }
 }
