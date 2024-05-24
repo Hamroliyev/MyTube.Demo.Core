@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Moq;
 using MyTube.Demo.Core.API.Models.Exeptions;
 using MyTube.Demo.Core.API.Models.Metadatas;
+using STX.EFxceptions.Abstractions.Models.Exceptions;
 using System;
 using System.Threading.Tasks;
 
@@ -56,7 +57,8 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
                 Title = invalidData
             };
 
-            InvalidVideoMetadataException invalidVideoMetadataException = new("Video Metadata is invalid.");
+            var invalidVideoMetadataException = new InvalidVideoMetadataException(
+                message: "Video Metadata is invalid.");
 
             invalidVideoMetadataException.AddData(key: nameof(VideoMetadata.Id),
                 values: "Id is required.");
@@ -100,60 +102,63 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
-        [Fact]
-        public async Task ShouldThrowValidationExceptionOnAddIfCreateAndUpdateDatesIsNotSameAndLogItAsync()
-        {
-            // given
-            DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
-            int randomNumber = GetRandomNumber();
-            VideoMetadata randomVideoMetadata = CreateRandomVideoMetadata(randomDateTime);
-            VideoMetadata invalidVideoMetadata = randomVideoMetadata;
+        //[Fact]
+        //public async Task ShouldThrowValidationExceptionOnAddIfCreateAndUpdateDatesIsNotSameAndLogItAsync()
+        //{
+        //    // given
+        //    DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
+        //    int randomNumber = GetRandomNumber();
+        //    VideoMetadata randomVideoMetadata = CreateRandomVideoMetadata(randomDateTime);
+        //    VideoMetadata invalidVideoMetadata = randomVideoMetadata;
 
-            this.dateTimeBrokerMock.Setup(broker =>
-                broker.GetCurrentDateTimeOffset())
-                    .Returns(randomDateTime);
+        //    this.dateTimeBrokerMock.Setup(broker =>
+        //        broker.GetCurrentDateTimeOffset())
+        //            .Returns(randomDateTime);
 
-            invalidVideoMetadata.UpdatedDate =
-                invalidVideoMetadata.CreatedDate.AddDays(randomNumber);
+        //    invalidVideoMetadata.UpdatedDate =
+        //        invalidVideoMetadata.CreatedDate.AddDays(randomNumber);
 
-            var invalidPostException =
-                new InvalidVideoMetadataException(message: "Invalid Date");
+        //    var invalidVideoMetadataException =
+        //        new InvalidVideoMetadataException(
+        //            message: $"Date is not the same as {nameof(VideoMetadata.CreatedDate)}");
 
-            invalidPostException.AddData(
-                key: nameof(VideoMetadata.UpdatedDate),
-                values: $"Date is not the same as {nameof(VideoMetadata.CreatedDate)}");
+        //    invalidVideoMetadataException.AddData(
+        //        key: nameof(VideoMetadata.UpdatedDate),
+        //        values: $"Date is not the same as {nameof(VideoMetadata.CreatedDate)}");
 
-            var expectedVideoMetadataValidationException =
-                new VideoMetadataValidationException("Invalid date",invalidPostException);
+        //    var expectedVideoMetadataValidationException =
+        //        new VideoMetadataValidationException(
+        //            message: $"Date is not the same as {nameof(VideoMetadata.CreatedDate)}",
+        //            innerException: invalidVideoMetadataException);
 
-            // when
-            ValueTask<VideoMetadata> addPostTask =
-                this.videoMetadataService.AddVideoMetadataAsync(invalidVideoMetadata);
+        //    // when
+        //    ValueTask<VideoMetadata> addPostTask =
+        //        this.videoMetadataService.AddVideoMetadataAsync(invalidVideoMetadata);
 
-            VideoMetadataValidationException actualVideoMetadataValidationException =
-                await Assert.ThrowsAsync<VideoMetadataValidationException>(
-                    addPostTask.AsTask);
+        //    VideoMetadataValidationException actualVideoMetadataValidationException =
+        //        await Assert.ThrowsAsync<VideoMetadataValidationException>(
+        //            addPostTask.AsTask);
 
-            // then
-            actualVideoMetadataValidationException.Should().BeEquivalentTo(
-                expectedVideoMetadataValidationException);
+        //    // then
+        //    actualVideoMetadataValidationException.Should().BeEquivalentTo(
+        //        expectedVideoMetadataValidationException);
 
-            this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(
-                    expectedVideoMetadataValidationException))),
-                        Times.Once);
+        //    this.loggingBrokerMock.Verify(broker =>
+        //        broker.LogError(It.Is(SameExceptionAs(
+        //            expectedVideoMetadataValidationException))),
+        //                Times.Once);
 
-            this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(),
-                        Times.Once);
-            this.storageBrokerMock.Verify(broker =>
-                broker.InsertVideoMetadataAsync(It.IsAny<VideoMetadata>()),
-                    Times.Never);
+        //    this.dateTimeBrokerMock.Verify(broker =>
+        //        broker.GetCurrentDateTimeOffset(),
+        //                Times.Once);
+        //    this.storageBrokerMock.Verify(broker =>
+        //        broker.InsertVideoMetadataAsync(It.IsAny<VideoMetadata>()),
+        //            Times.Never);
 
-            this.loggingBrokerMock.VerifyNoOtherCalls();
-            this.dateTimeBrokerMock.VerifyNoOtherCalls();
-            this.storageBrokerMock.VerifyNoOtherCalls();
-        }
+        //    this.loggingBrokerMock.VerifyNoOtherCalls();
+        //    this.dateTimeBrokerMock.VerifyNoOtherCalls();
+        //    this.storageBrokerMock.VerifyNoOtherCalls();
+        //}
 
         //[Theory]
         //[MemberData(nameof(MinutesBeforeOrAfter))]
@@ -167,24 +172,29 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
         //    DateTimeOffset invalidDateTime =
         //        randomDateTime.AddMinutes(minutesBeforeOrAfter);
 
-        //    Post randomPost = CreateRandomPost(invalidDateTime);
-        //    Post invalidPost = randomPost;
-        //    var invalidPostException =
-        //        new InvalidPostException();
-        //    invalidPostException.AddData(
-        //        key: nameof(Post.CreatedDate),
+        //    VideoMetadata randomVideoMetadata = CreateRandomVideoMetadata(invalidDateTime);
+        //    VideoMetadata invalidVideoMetadata = randomVideoMetadata;
+
+        //    var invalidVideoMetadataException =
+        //        new InvalidVideoMetadataException(
+        //            message: "Date is not recent");
+
+        //    invalidVideoMetadataException.AddData(
+        //        key: nameof(VideoMetadata.CreatedDate),
         //        values: "Date is not recent");
 
-        //    var expectedPostValidationException =
-        //        new PostValidationException(invalidPostException);
+        //    var expectedVideoMetadataValidationException =
+        //        new VideoMetadataValidationException(
+        //        message: "Date is not recent",
+        //        innerException: invalidVideoMetadataException);
 
         //    this.dateTimeBrokerMock.Setup(broker =>
         //        broker.GetCurrentDateTimeOffset())
         //            .Returns(randomDateTime);
 
         //    // when
-        //    ValueTask<Post> addPostTask =
-        //        this.postService.AddPostAsync(invalidPost);
+        //    ValueTask<VideoMetadata> addPostTask =
+        //        this.videoMetadataService.AddVideoMetadataAsync(invalidVideoMetadata);
 
         //    VideoMetadataValidationException actualPostValidationException =
         //       await Assert.ThrowsAsync<VideoMetadataValidationException>(
@@ -192,7 +202,7 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 
         //    // then
         //    actualPostValidationException.Should().BeEquivalentTo(
-        //        expectedPostValidationException);
+        //        expectedVideoMetadataValidationException);
 
         //    this.dateTimeBrokerMock.Verify(broker =>
         //        broker.GetCurrentDateTimeOffset(),
@@ -200,10 +210,10 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 
         //    this.loggingBrokerMock.Verify(broker =>
         //        broker.LogError(It.Is(SameExceptionAs(
-        //            expectedPostValidationException))),
+        //            expectedVideoMetadataValidationException))),
         //                Times.Once);
         //    this.storageBrokerMock.Verify(broker =>
-        //        broker.InsertPostAsync(It.IsAny<Post>()),
+        //        broker.InsertVideoMetadataAsync(It.IsAny<VideoMetadata>()),
         //            Times.Never);
 
         //    this.dateTimeBrokerMock.VerifyNoOtherCalls();

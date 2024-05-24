@@ -4,7 +4,6 @@
 // ---------------------------------------------------------------
 
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Hosting;
 using Moq;
 using MyTube.Demo.Core.API.Brokers.DateTimes.DateTimes;
 using MyTube.Demo.Core.API.Brokers.Loggings;
@@ -66,5 +65,23 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 
         private static int GetRandomNumber() =>
             new IntRange(min: 2, max: 10).GetValue();
+
+        private static int GetRandomNegativeNumber() =>
+            -1 * new IntRange(min: 2, max: 10).GetValue();
+
+        private static string GetRandomString() =>
+            new MnemonicString(wordCount: GetRandomNumber()).GetValue();
+
+        public static TheoryData MinutesBeforeOrAfter()
+        {
+            int randomNumber = GetRandomNumber();
+            int randomNegativeNumber = GetRandomNegativeNumber();
+
+            return new TheoryData<int>
+            {
+                randomNumber,
+                randomNegativeNumber
+            };
+        }
     }
 }

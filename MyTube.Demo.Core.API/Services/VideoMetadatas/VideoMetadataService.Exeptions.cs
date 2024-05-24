@@ -6,6 +6,7 @@
 using Microsoft.Data.SqlClient;
 using MyTube.Demo.Core.API.Models.Exeptions;
 using MyTube.Demo.Core.API.Models.Metadatas;
+using STX.EFxceptions.Abstractions.Models.Exceptions;
 using System;
 using System.Threading.Tasks;
 using Xeptions;
@@ -39,6 +40,25 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
 
                 throw CreateAndLogCriticalDependencyException(failedVideoMetadataStorageException);
             }
+            catch (DuplicateKeyException dublicateKeyException)
+            {
+                var alreadyExistsVideoMetadataException = new AlreadyExitsVideoMetadataException(
+                    message: "Video metadata already exists.",
+                    innerException: dublicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistsVideoMetadataException);
+            }
+        }
+
+        private Exception CreateAndLogDependencyValidationException(Xeption exception)
+        {
+            var videoMetadataDependencyValidationException = new VideoMetadataDependencyValidationException(
+                message: "Video metadata Dependency validation error occured , fix the errors and try again",
+                innerException: exception);
+
+            this.loggingBroker.LogError(videoMetadataDependencyValidationException);
+
+            return videoMetadataDependencyValidationException;
         }
 
         private VideoMetadataDependencyException CreateAndLogCriticalDependencyException(
@@ -53,7 +73,8 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
             return videoMetadataDependencyException;
         }
 
-        private VideoMetadataValidationException CreateAndLogValidationException(Xeption exception)
+        private VideoMetadataValidationException CreateAndLogValidationException(
+            Xeption exception)
         {
             var videoMetadataValidationException = new VideoMetadataValidationException(
                 "Video Metadata Validation Exception occured, fix the errors and try again.",

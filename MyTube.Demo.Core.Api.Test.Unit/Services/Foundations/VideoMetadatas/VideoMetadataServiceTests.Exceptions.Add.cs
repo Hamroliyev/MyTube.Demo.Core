@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using Moq;
 using MyTube.Demo.Core.API.Models.Exeptions;
 using MyTube.Demo.Core.API.Models.Metadatas;
+using STX.EFxceptions.Abstractions.Models.Exceptions;
 using System.Threading.Tasks;
 
 namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
@@ -54,6 +55,48 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
                 broker.LogCritical(It.Is(SameExceptionAs(
                     actualVideoMetadataDependencyException))),
                         Times.Once());
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnAddIfDublicateKeyErrorOccursAndLogItAsync()
+        {
+            //given
+            VideoMetadata randomVideoMetadata = CreateRandomVideoMetadata();
+            var randomMessage = GetRandomString();
+
+            var duplicateKeyException = new DuplicateKeyException(randomMessage);
+
+            var alreadyExistsVideoMetadataException = new AlreadyExitsVideoMetadataException(
+                message: "Video metadata already",
+                innerException: duplicateKeyException);
+
+            var expectedVideoMetadataDependencyValidationException =
+                new VideoMetadataDependencyValidationException(
+                    message: "Video metadata Dependency validation error occured , fix the errors and try again.",
+                    innerException: alreadyExistsVideoMetadataException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertVideoMetadataAsync(randomVideoMetadata)).ThrowsAsync(duplicateKeyException);
+
+            //when
+            ValueTask<VideoMetadata> addVideoMetadataTask = this.videoMetadataService
+                .AddVideoMetadataAsync(randomVideoMetadata);
+
+            var actualVideoMetadataDependencyValidationException =
+                await Assert.ThrowsAsync<VideoMetadataDependencyValidationException>(addVideoMetadataTask.AsTask);
+
+            //then
+            actualVideoMetadataDependencyValidationException.Should()
+                .BeEquivalentTo(expectedVideoMetadataDependencyValidationException);
+
+            this.loggingBrokerMock.Verify(broker => broker.LogError(It.Is(
+                SameExceptionAs(expectedVideoMetadataDependencyValidationException))), Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                    broker.InsertVideoMetadataAsync(It.IsAny<VideoMetadata>()), Times.Once);
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
