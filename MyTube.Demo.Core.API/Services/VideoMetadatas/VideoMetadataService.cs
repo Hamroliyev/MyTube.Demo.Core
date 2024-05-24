@@ -3,6 +3,7 @@
 // FREE TO USE AS LONG AS SOFTWARE FUNDS ARE DONATED TO THE POOR
 // ---------------------------------------------------------------
 
+using MyTube.Demo.Core.API.Brokers.DateTimes.DateTimes;
 using MyTube.Demo.Core.API.Brokers.Loggings;
 using MyTube.Demo.Core.API.Brokers.Storages;
 using MyTube.Demo.Core.API.Models.Metadatas;
@@ -14,12 +15,15 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
 
         public VideoMetadataService(IStorageBroker storageBroker,
-            ILoggingBroker loggingBroker)
+            ILoggingBroker loggingBroker,
+            IDateTimeBroker dateTimeBroker)
         {
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
+            this.dateTimeBroker = dateTimeBroker;
         }
 
         public ValueTask<VideoMetadata> AddVideoMetadataAsync(VideoMetadata videoMetadata) =>
