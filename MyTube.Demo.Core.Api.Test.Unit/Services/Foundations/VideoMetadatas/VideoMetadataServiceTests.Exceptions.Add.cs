@@ -70,7 +70,7 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
             var duplicateKeyException = new DuplicateKeyException(randomMessage);
 
             var alreadyExistsVideoMetadataException = new AlreadyExitsVideoMetadataException(
-                message: "Video metadata already",
+                message: "Video metadata already exists.",
                 innerException: duplicateKeyException);
 
             var expectedVideoMetadataDependencyValidationException =

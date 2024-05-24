@@ -53,7 +53,7 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
         private Exception CreateAndLogDependencyValidationException(Xeption exception)
         {
             var videoMetadataDependencyValidationException = new VideoMetadataDependencyValidationException(
-                message: "Video metadata Dependency validation error occured , fix the errors and try again",
+                message: "Video metadata Dependency validation error occured , fix the errors and try again.",
                 innerException: exception);
 
             this.loggingBroker.LogError(videoMetadataDependencyValidationException);
