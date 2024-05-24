@@ -40,8 +40,8 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
         private static VideoMetadata CreateRandomVideoMetadata() =>
            CreateRandomVideoMetadataFiller(date: GetRandomDateTimeOffset()).Create();
 
-        private static VideoMetadata CreateRandomVideoMetadata(DateTimeOffset dates) =>
-            CreateRandomVideoMetadataFiller(dates).Create();
+        private static VideoMetadata CreateRandomVideoMetadata(DateTimeOffset date) =>
+            CreateRandomVideoMetadataFiller(date).Create();
 
 
         public static DateTimeOffset GetRandomDateTimeOffset() =>

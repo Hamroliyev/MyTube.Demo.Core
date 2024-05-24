@@ -121,7 +121,7 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 
             var invalidVideoMetadataException =
                 new InvalidVideoMetadataException(
-                    message: $"Date is not the same as {nameof(VideoMetadata.CreatedDate)}");
+                    message: "Video Metadata Validation Exception occured, fix the errors and try again.");
 
             invalidVideoMetadataException.AddData(
                 key: nameof(VideoMetadata.UpdatedDate),
@@ -129,16 +129,16 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 
             var expectedVideoMetadataValidationException =
                 new VideoMetadataValidationException(
-                    message: $"Date is not the same as {nameof(VideoMetadata.CreatedDate)}",
+                    message: "Video Metadata Validation Exception occured, fix the errors and try again.",
                     innerException: invalidVideoMetadataException);
 
             // when
-            ValueTask<VideoMetadata> addPostTask =
+            ValueTask<VideoMetadata> addVideoMetadataTask =
                 this.videoMetadataService.AddVideoMetadataAsync(invalidVideoMetadata);
 
-            VideoMetadataValidationException actualVideoMetadataValidationException =
+            var actualVideoMetadataValidationException =
                 await Assert.ThrowsAsync<VideoMetadataValidationException>(
-                    addPostTask.AsTask);
+                    addVideoMetadataTask.AsTask);
 
             // then
             actualVideoMetadataValidationException.Should().BeEquivalentTo(
@@ -148,17 +148,15 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
                 broker.LogError(It.Is(SameExceptionAs(
                     expectedVideoMetadataValidationException))),
                         Times.Once);
+            
 
-            this.dateTimeBrokerMock.Verify(broker =>
-                broker.GetCurrentDateTimeOffset(),
-                        Times.Once);
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertVideoMetadataAsync(It.IsAny<VideoMetadata>()),
                     Times.Never);
 
+            this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
-            this.storageBrokerMock.VerifyNoOtherCalls();
         }
 
         //[Theory]
