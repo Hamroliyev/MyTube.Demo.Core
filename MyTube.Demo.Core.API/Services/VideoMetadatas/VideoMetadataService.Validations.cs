@@ -86,7 +86,7 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
             var invalidVideoMetadataException = new InvalidVideoMetadataException(
-                message: "Video Metadata Validation Exception occured, fix the errors and try again.");
+                message: "Video Metadata is invalid.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {

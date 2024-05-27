@@ -145,7 +145,7 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
                 expectedVideoMetadataValidationException);
 
             this.loggingBrokerMock.Verify(broker =>
-                broker.LogError(It.Is(SameExceptionAs(
+                broker.LogError(It.Is(SameValidationExceptionAs(
                     expectedVideoMetadataValidationException))),
                         Times.Once);
             
@@ -165,8 +165,7 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
         //    int minutesBeforeOrAfter)
         //{
         //    // given
-        //    DateTimeOffset randomDateTime =
-        //        GetRandomDateTimeOffset();
+        //    DateTimeOffset randomDateTime = GetRandomDateTimeOffset();
 
         //    DateTimeOffset invalidDateTime =
         //        randomDateTime.AddMinutes(minutesBeforeOrAfter);
@@ -211,6 +210,7 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
         //        broker.LogError(It.Is(SameExceptionAs(
         //            expectedVideoMetadataValidationException))),
         //                Times.Once);
+
         //    this.storageBrokerMock.Verify(broker =>
         //        broker.InsertVideoMetadataAsync(It.IsAny<VideoMetadata>()),
         //            Times.Never);
