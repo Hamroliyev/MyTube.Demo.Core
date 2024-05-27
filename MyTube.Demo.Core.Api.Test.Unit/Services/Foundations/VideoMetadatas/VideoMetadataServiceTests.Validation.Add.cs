@@ -121,7 +121,7 @@ namespace MyTube.Demo.Core.Api.Test.Unit.Services.Foundations.VideoMetadatas
 
             var invalidVideoMetadataException =
                 new InvalidVideoMetadataException(
-                    message: "Video Metadata Validation Exception occured, fix the errors and try again.");
+                    message: "Video Metadata is invalid.");
 
             invalidVideoMetadataException.AddData(
                 key: nameof(VideoMetadata.UpdatedDate),
