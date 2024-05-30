@@ -27,8 +27,6 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
                         secondDate: videoMetadata.CreatedDate,
                         secondDateName: nameof(videoMetadata.CreatedDate)),
                    Parameter: nameof(videoMetadata.UpdatedDate)));
-
-                //(Rule: IsNotRecent(videoMetadata.CreatedDate), Parameter: nameof(videoMetadata.CreatedDate)));
         }
 
         private void ValidateVideoMetadataNotNull(VideoMetadata videoMetadata)
