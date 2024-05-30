@@ -20,13 +20,13 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
                 (Rule: IsInvalid(videoMetadata.Title), Parameter: nameof(VideoMetadata.Title)),
                 (Rule: IsInvalid(videoMetadata.BlobPath), Parameter: nameof(VideoMetadata.BlobPath)),
                 (Rule: IsInvalid(videoMetadata.CreatedDate), Parameter: nameof(VideoMetadata.CreatedDate)),
-                (Rule: IsInvalid(videoMetadata.UpdatedDate), Parameter: nameof(VideoMetadata.UpdatedDate)));
+                (Rule: IsInvalid(videoMetadata.UpdatedDate), Parameter: nameof(VideoMetadata.UpdatedDate)),
 
-                //(Rule: IsNotSame(
-                //        firstDate: videoMetadata.UpdatedDate,
-                //        secondDate: videoMetadata.CreatedDate,
-                //        secondDateName: nameof(videoMetadata.CreatedDate)),
-                //   Parameter: nameof(videoMetadata.UpdatedDate)),
+                (Rule: IsNotSame(
+                        firstDate: videoMetadata.UpdatedDate,
+                        secondDate: videoMetadata.CreatedDate,
+                        secondDateName: nameof(videoMetadata.CreatedDate)),
+                   Parameter: nameof(videoMetadata.UpdatedDate)));
 
                 //(Rule: IsNotRecent(videoMetadata.CreatedDate), Parameter: nameof(videoMetadata.CreatedDate)));
         }
@@ -85,7 +85,8 @@ namespace MyTube.Demo.Core.API.Services.VideoMetadatas
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
-            var invalidVideoMetadataException = new InvalidVideoMetadataException(message: "Video Metadata is invalid.");
+            var invalidVideoMetadataException = new InvalidVideoMetadataException(
+                message: "Video Metadata is invalid.");
 
             foreach ((dynamic rule, string parameter) in validations)
             {
